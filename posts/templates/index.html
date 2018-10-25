@@ -4,7 +4,8 @@
     <body>
         <h1>POST :v</h1>
         {% for obj in object_list%}
-        {{obj.titulo}} <br/>
+        {%url "posts:detail" id=obj.id %}
+        <a href='{{obj.get_absolute_url}}'> {{obj.titulo}}</a><br/>
         {{obj.contenido}} <br/>
         {{obj.timestamp}} <br/>
         {{obj.actualziado}} <br/>
