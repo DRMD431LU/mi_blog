@@ -1,13 +1,20 @@
 {%extends "base.html"%}
+{%load urlify%}
+<title>{%block head_title%}{{instance.titulo}} | {{block.super}}{%endblock head_title%}</title>
 {%block content%}
-<html>
-    <body>
-        <h1>{{titulo}}</h1>
-        {{instance.titulo}} <br/>
+<div class='col-sm-6 col-sm-offset-3'>
+	{%if instance.imagen%}
+	<img src="{{instance.imagen.url}}" class="img-responsive"/>
+	{%endif%}
+        <h1>{{titulo}} <small>{{instance.timestamp}}</small></h1><br/>
+<br/>
+{{instance.titulo|urlify}}
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{request.build_absolute_uri}}">
+<i class="fa fa-facebook-square fa-3x" aria-hidden="true"></i>
+</a><a href="https://twitter.com/home?status={{share_string}} {{request.build_absolute_uri}}">
+<i class="fa fa-twitter-square fa-3x" aria-hidden="true"></i>
+</a><br/>
+
         {{instance.contenido}} <br/>
-        {{instance.timestamp}} <br/>
-        {{instance.actualziado}} <br/>
-        {{instance.id}} <br/>
-    </body>
-</html>
+</div>
 {%endblock%}
