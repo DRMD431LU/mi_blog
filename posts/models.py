@@ -4,6 +4,11 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
+from django.utils import timezone
+
+class PostManager(models.Manager):
+	def active(self, *args, **kwargs):
+		return super(PostManager,self).filter(draft=False).filter(publish__lte=timezone.now())
 
 # Create your models here.
 def upload_location(instance,filename):
@@ -13,6 +18,8 @@ class Post(models.Model):
 	user = models.ForeignKey(settings.AUTH_USER_MODEL,default=1)
 	titulo = models.CharField(max_length=150)
 	slug = models.SlugField(unique=True)
+	draft = models.BooleanField(default=False)
+	publish = models.DateField(auto_now=False,auto_now_add=False)
 	imagen = models.ImageField(upload_to=upload_location,null=True, blank = True,
 		height_field="height_field",
 		width_field="width_field")
@@ -21,6 +28,7 @@ class Post(models.Model):
 	contenido = models.TextField()
 	timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
 	actualizado = models.DateTimeField(auto_now_add=False, auto_now=True)
+	objects = PostManager()
 
 	def __str__(self):
 		return self.titulo
